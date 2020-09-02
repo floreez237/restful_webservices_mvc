@@ -4,8 +4,11 @@ import com.florian.restful_webservices_mvc.domain.Category;
 import com.florian.restful_webservices_mvc.repositories.CategoryRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.stereotype.Component;
 
 @Slf4j
+@Component
 public class Bootstrap implements CommandLineRunner {
     private final CategoryRepository categoryRepository;
 
