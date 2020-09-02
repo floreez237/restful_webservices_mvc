@@ -24,4 +24,15 @@ class CategoryMapperTest {
         assertEquals(NAME,categoryDTO.getName());
 
     }
+
+    @Test
+    void categoryDTOToCategory() {
+        CategoryDTO categoryDTO = new CategoryDTO();
+        categoryDTO.setId(ID);
+        categoryDTO.setName(NAME);
+
+        Category category = categoryMapper.CategoryDTOToCategory(categoryDTO);
+        assertEquals(ID,categoryDTO.getId());
+        assertEquals(NAME,categoryDTO.getName());
+    }
 }
