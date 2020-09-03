@@ -12,6 +12,7 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
@@ -46,7 +47,7 @@ class CustomerServiceImplTest {
         customer.setFirstName(FIRST_NAME);
         customer.setLastName(LAST_NAME);
 
-        when(customerRepository.getOne(ID)).thenReturn(customer);
+        when(customerRepository.findById(ID)).thenReturn(Optional.of(customer));
 
         CustomerDTO customerDTO = customerService.getCustomerDTOById(ID);
         assertEquals(FIRST_NAME,customerDTO.getFirstName());

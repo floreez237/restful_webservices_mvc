@@ -1,5 +1,7 @@
 package com.florian.restful_webservices_mvc.controllers.v1;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.florian.restful_webservices_mvc.api.v1.model.CustomerDTO;
 import com.florian.restful_webservices_mvc.services.interfaces.CategoryService;
 import com.florian.restful_webservices_mvc.services.interfaces.CustomerService;
@@ -19,7 +21,7 @@ import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -45,8 +47,7 @@ class CustomerControllerTest {
     void getAllCustomers() throws Exception {
         when(customerService.getAllCustomers()).thenReturn(Arrays.asList(new CustomerDTO(), new CustomerDTO()));
 
-        mockMvc.perform(get("/api/v1/customers/")
-                .contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(get("/api/v1/customers/"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.customers", IsCollectionWithSize.hasSize(2)));
     }
@@ -59,9 +60,39 @@ class CustomerControllerTest {
 
         when(customerService.getCustomerDTOById(ID)).thenReturn(customerDTO);
 
-        mockMvc.perform(get("/api/v1/customers/1")
-                .contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(get("/api/v1/customers/1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.firstName", CoreMatchers.equalTo(FIRST_NAME)));
+    }
+
+    @Test
+    void createNewCustomer() throws Exception {
+        CustomerDTO customerDTO = new CustomerDTO();
+        customerDTO.setFirstName("Florian");
+        customerDTO.setLastName("Lowe");
+
+        CustomerDTO savedDto = new CustomerDTO();
+        savedDto.setFirstName("Florian");
+        savedDto.setLastName("Lowe");
+        savedDto.setId(ID);
+        savedDto.setCustomerUrl("/api/v1/customers/" + ID);
+
+        when(customerService.createNewCustomer(customerDTO)).thenReturn(savedDto);
+        mockMvc.perform(post("/api/v1/customers/")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(customerDTO)))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.firstName", CoreMatchers.equalTo("Florian")))
+                .andExpect(jsonPath("$.lastName", CoreMatchers.equalTo("Lowe")))
+                .andExpect(jsonPath("$.customerUrl", CoreMatchers.equalTo("/api/v1/customers/" + ID)))
+                .andExpect(jsonPath("$.id", CoreMatchers.equalTo(1)));
+    }
+
+    private String asJsonString(Object o) {
+        try {
+            return new ObjectMapper().writeValueAsString(o);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException();
+        }
     }
 }

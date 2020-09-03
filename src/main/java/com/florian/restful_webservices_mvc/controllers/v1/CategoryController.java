@@ -21,12 +21,11 @@ public class CategoryController {
         this.categoryService = categoryService;
     }
 
-    @GetMapping
+    @GetMapping(produces = "application/json")
     public ResponseEntity<CategoryListDTO> getAllCategories() {
         return new ResponseEntity<>(
                 new CategoryListDTO(categoryService.findAll()), HttpStatus.OK);
     }
-
 
     @GetMapping("{name}")
     public ResponseEntity<CategoryDTO> getCategoryByName(@PathVariable String name) {

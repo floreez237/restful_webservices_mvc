@@ -52,8 +52,7 @@ class CategoryControllerTest {
 
         when(categoryService.findAll()).thenReturn(Arrays.asList(categoryDTO, categoryDTO2));
 
-        mockMvc.perform(get("/api/v1/categories/")
-                .contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(get("/api/v1/categories/"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.categories", IsCollectionWithSize.hasSize(2)));
 
@@ -67,8 +66,7 @@ class CategoryControllerTest {
 
         when(categoryService.findByName(anyString())).thenReturn(categoryDTO);
 
-        mockMvc.perform(get("/api/v1/categories/Jim")
-                .contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(get("/api/v1/categories/Jim"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name", CoreMatchers.equalTo("Jim")));
     }

@@ -2,6 +2,7 @@ package com.florian.restful_webservices_mvc.services.implementations;
 
 import com.florian.restful_webservices_mvc.api.v1.mapper.CustomerMapper;
 import com.florian.restful_webservices_mvc.api.v1.model.CustomerDTO;
+import com.florian.restful_webservices_mvc.domain.Customer;
 import com.florian.restful_webservices_mvc.repositories.CustomerRepository;
 import com.florian.restful_webservices_mvc.services.interfaces.CustomerService;
 import org.springframework.stereotype.Service;
@@ -29,8 +30,17 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public CustomerDTO getCustomerDTOById(Long customerId) {
-        return customerMapper.customerToCustomerDTO(customerRepository.getOne(customerId));
+        /*final Customer customer = customerRepository.getOne(customerId);
+        return customerMapper.customerToCustomerDTO(customer);*/
+        return customerRepository.findById(customerId)
+                .map(customerMapper::customerToCustomerDTO)
+                .orElseThrow(RuntimeException::new);
+    }
 
+    @Override
+    public CustomerDTO createNewCustomer(CustomerDTO customerDTO) {
+        Customer customer = customerMapper.customerDTOToCustomer(customerDTO);
+        return customerMapper.customerToCustomerDTO(customerRepository.save(customer));
     }
 
 }

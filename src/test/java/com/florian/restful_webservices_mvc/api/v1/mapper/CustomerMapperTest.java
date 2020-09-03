@@ -21,6 +21,7 @@ class CustomerMapperTest {
         assertEquals(ID,customerDTO.getId());
         assertEquals(FIRST_NAME, customerDTO.getFirstName());
         assertNull(customerDTO.getLastName());
+        assertNotNull(customerDTO.getCustomerUrl());
     }
 
     @Test
