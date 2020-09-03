@@ -13,9 +13,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.util.List;
 
 @Controller
-@RequestMapping("/api/v1/categories/")
+@RequestMapping({CategoryController.BASE_URL,"/api/v1/categories"})
 public class CategoryController {
     private final CategoryService categoryService;
+    public static final String BASE_URL = "/api/v1/categories/";
 
     public CategoryController(CategoryService categoryService) {
         this.categoryService = categoryService;
@@ -27,7 +28,7 @@ public class CategoryController {
                 new CategoryListDTO(categoryService.findAll()), HttpStatus.OK);
     }
 
-    @GetMapping("{name}")
+    @GetMapping("name/{name}")
     public ResponseEntity<CategoryDTO> getCategoryByName(@PathVariable String name) {
         return new ResponseEntity<>(categoryService.findByName(name), HttpStatus.OK);
     }

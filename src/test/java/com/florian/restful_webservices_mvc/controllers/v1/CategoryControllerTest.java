@@ -2,6 +2,7 @@ package com.florian.restful_webservices_mvc.controllers.v1;
 
 import com.florian.restful_webservices_mvc.api.v1.mapper.CategoryMapper;
 import com.florian.restful_webservices_mvc.api.v1.model.CategoryDTO;
+import com.florian.restful_webservices_mvc.exceptions.ResourceNotFoundException;
 import com.florian.restful_webservices_mvc.services.interfaces.CategoryService;
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.collection.IsCollectionWithSize;
@@ -17,6 +18,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.Arrays;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -37,7 +39,9 @@ class CategoryControllerTest {
     void setUp() {
         MockitoAnnotations.initMocks(this);
 
-        mockMvc = MockMvcBuilders.standaloneSetup(categoryController).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(categoryController)
+                .setControllerAdvice(new RestResponseEntityHandler())
+                .build();
     }
 
     @Test
@@ -52,7 +56,7 @@ class CategoryControllerTest {
 
         when(categoryService.findAll()).thenReturn(Arrays.asList(categoryDTO, categoryDTO2));
 
-        mockMvc.perform(get("/api/v1/categories/"))
+        mockMvc.perform(get(CategoryController.BASE_URL))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.categories", IsCollectionWithSize.hasSize(2)));
 
@@ -66,8 +70,16 @@ class CategoryControllerTest {
 
         when(categoryService.findByName(anyString())).thenReturn(categoryDTO);
 
-        mockMvc.perform(get("/api/v1/categories/Jim"))
+        mockMvc.perform(get(CategoryController.BASE_URL + "name/Jim"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name", CoreMatchers.equalTo("Jim")));
+    }
+
+    @Test
+    void testGetCategoryNameNotFound() throws Exception {
+        when(categoryService.findByName(anyString())).thenThrow(new ResourceNotFoundException("Not Found Exception"));
+
+        mockMvc.perform(get(CategoryController.BASE_URL + "name/foo"))
+                .andExpect(status().isNotFound());
     }
 }

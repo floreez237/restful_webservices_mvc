@@ -62,6 +62,13 @@ class CustomerServiceImplIT {
         assertNotNull(patchedDto.getFirstName());
     }
 
+    @Test
+    void deleteCustomer() {
+        long initialCount = customerRepository.count();
+        customerService.deleteCustomerById(getFirstCustomerId());
+        assertEquals(initialCount-1,customerRepository.count());
+    }
+
     /*This is because after each test the the data present in the databse is deleted and recreated
     * This causes the ID to be incremented.*/
     private Long getFirstCustomerId() {

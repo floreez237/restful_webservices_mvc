@@ -3,6 +3,7 @@ package com.florian.restful_webservices_mvc.services.implementations;
 import com.florian.restful_webservices_mvc.api.v1.mapper.CustomerMapper;
 import com.florian.restful_webservices_mvc.api.v1.model.CustomerDTO;
 import com.florian.restful_webservices_mvc.domain.Customer;
+import com.florian.restful_webservices_mvc.exceptions.ResourceNotFoundException;
 import com.florian.restful_webservices_mvc.repositories.CustomerRepository;
 import com.florian.restful_webservices_mvc.services.interfaces.CustomerService;
 import org.springframework.stereotype.Service;
@@ -34,7 +35,7 @@ public class CustomerServiceImpl implements CustomerService {
         return customerMapper.customerToCustomerDTO(customer);*/
         return customerRepository.findById(customerId)
                 .map(customerMapper::customerToCustomerDTO)
-                .orElseThrow(RuntimeException::new);
+                .orElseThrow(ResourceNotFoundException::new);
     }
 
     @Override
@@ -55,7 +56,12 @@ public class CustomerServiceImpl implements CustomerService {
                     }
 
                     return customerMapper.customerToCustomerDTO(customerRepository.save(customer));
-                }).orElseThrow(RuntimeException::new);
+                }).orElseThrow(ResourceNotFoundException::new);
+    }
+
+    @Override
+    public void deleteCustomerById(Long id) {
+        customerRepository.deleteById(id);
     }
 
 }

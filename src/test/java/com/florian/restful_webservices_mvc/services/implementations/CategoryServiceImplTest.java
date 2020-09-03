@@ -14,6 +14,7 @@ import org.springframework.ui.ModelExtensionsKt;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
@@ -52,7 +53,7 @@ class CategoryServiceImplTest {
         category.setId(ID);
         category.setName(NAME);
 
-        when(categoryRepository.findByName(NAME)).thenReturn(category);
+        when(categoryRepository.findByName(NAME)).thenReturn(Optional.of(category));
 
         CategoryDTO categoryDTO = categoryService.findByName(NAME);
 

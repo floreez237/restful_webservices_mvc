@@ -8,10 +8,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.xml.ws.Response;
+
 @Controller
-@RequestMapping({"/api/v1/customers/","/api/v1/customers",})
+@RequestMapping({CustomerController.BASE_URL,"/api/v1/customers",})
 public class CustomerController {
     private final CustomerService customerService;
+    public static final String BASE_URL = "/api/v1/customers/";
 
 
     public CustomerController(CustomerService customerService) {
@@ -35,6 +38,17 @@ public class CustomerController {
     @PostMapping
     public ResponseEntity<CustomerDTO> saveCustomer(@RequestBody CustomerDTO customerDTO) {
         return new ResponseEntity<>(customerService.saveCustomer(customerDTO),HttpStatus.CREATED);
+    }
+
+    @PatchMapping
+    public ResponseEntity<CustomerDTO> patchCustomer(@RequestBody CustomerDTO customerDTO) {
+        return new ResponseEntity<>(customerService.patchCustomer(customerDTO),HttpStatus.OK);
+    }
+
+    @DeleteMapping("{id}")
+    public ResponseEntity<Void> deleteCustomer(@PathVariable String id) {
+        customerService.deleteCustomerById(Long.parseLong(id));
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }
