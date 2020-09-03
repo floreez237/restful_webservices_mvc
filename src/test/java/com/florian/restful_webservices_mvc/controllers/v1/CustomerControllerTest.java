@@ -3,7 +3,6 @@ package com.florian.restful_webservices_mvc.controllers.v1;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.florian.restful_webservices_mvc.api.v1.model.CustomerDTO;
-import com.florian.restful_webservices_mvc.services.interfaces.CategoryService;
 import com.florian.restful_webservices_mvc.services.interfaces.CustomerService;
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.collection.IsCollectionWithSize;
@@ -14,12 +13,10 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.Arrays;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -77,7 +74,7 @@ class CustomerControllerTest {
         savedDto.setId(ID);
         savedDto.setCustomerUrl("/api/v1/customers/" + ID);
 
-        when(customerService.createNewCustomer(customerDTO)).thenReturn(savedDto);
+        when(customerService.saveCustomer(customerDTO)).thenReturn(savedDto);
         mockMvc.perform(post("/api/v1/customers/")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(customerDTO)))
