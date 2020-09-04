@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.xml.ws.Response;
 
-@Controller
+@RestController
 @RequestMapping({CustomerController.BASE_URL,"/api/v1/customers",})
 public class CustomerController {
     private final CustomerService customerService;
@@ -22,33 +22,34 @@ public class CustomerController {
     }
 
     @GetMapping
-    public ResponseEntity<CustomerListDTO> getAllCustomers() {
-        return new ResponseEntity<>(
-                new CustomerListDTO(customerService.getAllCustomers()),
-                HttpStatus.OK
-        );
+    @ResponseStatus(HttpStatus.OK)
+    public CustomerListDTO getAllCustomers() {
+        return new CustomerListDTO(customerService.getAllCustomers());
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<CustomerDTO> getCustomerById(@PathVariable String id) {
+    @ResponseStatus(HttpStatus.OK)
+    public CustomerDTO getCustomerById(@PathVariable String id) {
         Long customerID = Long.parseLong(id);
-        return new ResponseEntity<>(customerService.getCustomerDTOById(customerID),HttpStatus.OK);
+        return customerService.getCustomerDTOById(customerID);
     }
 
     @PostMapping
-    public ResponseEntity<CustomerDTO> saveCustomer(@RequestBody CustomerDTO customerDTO) {
-        return new ResponseEntity<>(customerService.saveCustomer(customerDTO),HttpStatus.CREATED);
+    @ResponseStatus(HttpStatus.CREATED)
+    public CustomerDTO saveCustomer(@RequestBody CustomerDTO customerDTO) {
+        return customerService.saveCustomer(customerDTO);
     }
 
     @PatchMapping
-    public ResponseEntity<CustomerDTO> patchCustomer(@RequestBody CustomerDTO customerDTO) {
-        return new ResponseEntity<>(customerService.patchCustomer(customerDTO),HttpStatus.OK);
+    @ResponseStatus(HttpStatus.OK)
+    public CustomerDTO patchCustomer(@RequestBody CustomerDTO customerDTO) {
+        return customerService.patchCustomer(customerDTO);
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<Void> deleteCustomer(@PathVariable String id) {
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteCustomer(@PathVariable String id) {
         customerService.deleteCustomerById(Long.parseLong(id));
-        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }

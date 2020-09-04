@@ -6,7 +6,6 @@ import com.florian.restful_webservices_mvc.exceptions.ResourceNotFoundException;
 import com.florian.restful_webservices_mvc.repositories.CategoryRepository;
 import com.florian.restful_webservices_mvc.services.interfaces.CategoryService;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.ResourceAccessException;
 
 import java.util.List;
 import java.util.stream.Collectors;
