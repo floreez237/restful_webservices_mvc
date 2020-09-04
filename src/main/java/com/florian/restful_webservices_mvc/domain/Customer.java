@@ -1,6 +1,5 @@
 package com.florian.restful_webservices_mvc.domain;
 
-import com.sun.org.apache.xml.internal.security.keys.keyresolver.implementations.PrivateKeyResolver;
 import lombok.Data;
 
 import javax.persistence.Entity;
