@@ -6,15 +6,13 @@ import com.florian.restful_webservices_mvc.bootstrap.Bootstrap;
 import com.florian.restful_webservices_mvc.domain.Customer;
 import com.florian.restful_webservices_mvc.repositories.CategoryRepository;
 import com.florian.restful_webservices_mvc.repositories.CustomerRepository;
+import com.florian.restful_webservices_mvc.repositories.VendorRepository;
 import com.florian.restful_webservices_mvc.services.interfaces.CustomerService;
-import com.sun.org.apache.bcel.internal.generic.NEW;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -30,6 +28,9 @@ class CustomerServiceImplIT {
     @Autowired
     CategoryRepository categoryRepository;
 
+    @Autowired
+    VendorRepository vendorRepository;
+
 
 
     CustomerService customerService;
@@ -39,7 +40,7 @@ class CustomerServiceImplIT {
     void setUp() throws Exception {
         customerService = new CustomerServiceImpl(customerRepository, CustomerMapper.INSTANCE);
         System.out.println("Loading Customer data");
-        Bootstrap bootstrap = new Bootstrap(categoryRepository, customerRepository);
+        Bootstrap bootstrap = new Bootstrap(categoryRepository, customerRepository, vendorRepository);
         bootstrap.run();
 
     }
