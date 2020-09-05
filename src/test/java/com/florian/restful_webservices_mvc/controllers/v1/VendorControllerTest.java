@@ -6,13 +6,13 @@ import com.florian.restful_webservices_mvc.api.v1.model.VendorDTO;
 import com.florian.restful_webservices_mvc.services.interfaces.VendorService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.Arrays;
 
@@ -26,22 +26,23 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@ExtendWith(SpringExtension.class)
+@WebMvcTest(controllers = VendorController.class)
 class VendorControllerTest {
 
     public static final String NAME = "Lowe";
-    @Mock
+    @MockBean
     VendorService vendorService;
-    @InjectMocks
-    VendorController vendorController;
 
+    @Autowired
     MockMvc mockMvc;
 
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.initMocks(this);
+        /*MockitoAnnotations.initMocks(this);
         mockMvc = MockMvcBuilders.standaloneSetup(vendorController)
                 .setControllerAdvice(new RestResponseEntityHandler())
-                .build();
+                .build();*/
     }
 
     @Test
