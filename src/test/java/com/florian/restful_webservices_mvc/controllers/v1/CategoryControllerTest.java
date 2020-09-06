@@ -70,7 +70,8 @@ class CategoryControllerTest {
 
         when(categoryService.findByName(anyString())).thenReturn(categoryDTO);
 
-        mockMvc.perform(get(CategoryController.BASE_URL + "name/Jim"))
+        mockMvc.perform(get(CategoryController.BASE_URL + "name/Jim")
+        .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name", CoreMatchers.equalTo("Jim")));
     }

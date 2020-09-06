@@ -50,7 +50,8 @@ class CustomerControllerTest {
     void getAllCustomers() throws Exception {
         when(customerService.getAllCustomers()).thenReturn(Arrays.asList(new CustomerDTO(), new CustomerDTO()));
 
-        mockMvc.perform(get(CustomerController.BASE_URL))
+        mockMvc.perform(get(CustomerController.BASE_URL)
+                .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.customers", IsCollectionWithSize.hasSize(2)));
     }
@@ -63,7 +64,8 @@ class CustomerControllerTest {
 
         when(customerService.getCustomerDTOById(ID)).thenReturn(customerDTO);
 
-        mockMvc.perform(get(CustomerController.BASE_URL + 1))
+        mockMvc.perform(get(CustomerController.BASE_URL + 1)
+        .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.firstName", equalTo(FIRST_NAME)));
     }
@@ -82,6 +84,7 @@ class CustomerControllerTest {
 
         when(customerService.saveCustomer(customerDTO)).thenReturn(savedDto);
         mockMvc.perform(post(CustomerController.BASE_URL)
+                .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(customerDTO)))
                 .andExpect(status().isCreated())
@@ -99,6 +102,7 @@ class CustomerControllerTest {
         when(customerService.patchCustomer(any(CustomerDTO.class))).thenReturn(patchedDto);
 
         mockMvc.perform(patch(CustomerController.BASE_URL)
+                .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(customerDTO)))
                 .andExpect(status().isOk())
